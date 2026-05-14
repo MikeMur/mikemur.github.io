@@ -1,0 +1,440 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Introduzione</title>
+<base target="_self">
+<style type="text/css">
+.style1 {
+	border-collapse: collapse;
+	border-style: solid;
+	border-width: 1px;
+}
+.style32 {
+	border-width: 0px;
+}
+</style>
+</head>
+
+<body text="#000000" link="#800080" vlink="#0000CC" alink="#009999" background="images/pergamena_sfondo_1.jpg">
+<!-- START of freefind onpage results html -->
+<!-- position these div's right after your body tag -->
+
+<!--  FreeFind on-page results divs  -->
+<div id="ffresult_win"   style=" z-index:1; padding: 20px 0 16px 0; margin:0px; width:538px; height:728px; border:none; display:none; position:absolute; top:0px; left:0px;">
+	<div  id="ffresult_bar" onmousedown="ffresults.drag(event,false)"  style="cursor: move; z-index:5; position:absolute; top:0px; left:0px; background-color:maroon; padding:0; text-align: right; width:100%; height:20px; display:block;  border:solid; border-width: 1px; border-bottom: 0px; border-color:maroon;">
+	<a  id="ffrclose" style="z-index:6; font-family: arial, verdana, sans-serif; font-size:8pt; color:white; " href="javascript:ffresults.hide()">Close window [X]</a>&nbsp;&nbsp;&nbsp;
+	</div>
+	<div  id="ffresult_2" style="z-index:7; position: relative; height: 100%; background-color:white;  display:block;">
+	<div  id="ffresult_cvr" style="z-index:0; position:absolute; top:0px; left:0px; display:block; width:100%; height:100%;">
+	</div>
+	<iframe  id="ffresult_ifr" name="ffresult_frame"  style="border-left:1px solid gray; border-right:1px solid gray; border-top:0px solid gray; border-bottom:0px solid gray; z-index:1; position:absolute; top:0; left:0; width:560px; height:723px" src="" scrolling="auto" frameborder="0">
+	</iframe>
+	</div>
+	<div  id="ffresult_btm" style=" position:absolute; bottom:-1; left:0px; border:solid; border-color:gray; border-width: 1px; border-top: 0px; display: block; z-index:18; background-color:#d0d0d0; width:100%; height:16px; " >
+		<div  id="ffresult_sbx" onmousedown="ffresults.drag(event,true);" style="cursor: se-resize; float:right; border:none; border-color:gray; border-width: 0px; width:16px; height:16px; "><img  style="" id="ffresult_szimg" height=16 width=16 border=0 src="" alt=""></div>
+	</div>
+</div>
+
+
+<!--  FreeFind on-page results handler  -->
+
+<script type="text/javascript">
+<!--
+var ffresults = {
+
+	// copyright 2008 - 2010 FreeFind.com - authorized for use with the FreeFind service only
+
+	// Start of config settings
+
+    autoPos : true,			// automatic initial window position / size. 
+
+	// if autoPos if false, the following four numbers are used as initial window position and size
+
+	initialX : 78,			// left position (pixels)
+	initialY : 66,			// right position (pixels)
+	initialH : 395,			// height of window
+	initialW : 622,			// width of window
+
+	// choose a number for z-index that is high enough so the results window appears above other windows on your page
+
+	initialZ : 10000000,    // initial z-index of the results window
+	
+	// the following value controls the color of the window's drag bar (top area of window)
+	
+	barColor : 'navy',
+
+	// end of config settings
+
+	element : undefined,
+	cover : undefined,
+	mouseDownX : 0,
+	mouseDownY : 0,
+	objectX : 0,
+	objectY : 0,
+	objectH : 0,
+	objectW : 0,
+    ipos : false,
+	resize : false,
+	
+	sizeImageUrl : 'http://search.freefind.com/img/rsize.gif',
+
+	selectFunc : undefined,
+	selectState : undefined,
+	mozSelect : undefined,
+
+	noSelect : function()
+	{
+	    var obj = document.body;
+
+        ffresults.selectFunc = obj.onselectstart;
+		ffresults.selectState = obj.unselectable;
+		ffresults.mozSelect = obj.style.MozUserSelect;
+
+		obj.onselectstart = function(){ return false; };
+		obj.unselectable = 'on';
+		obj.style.MozUserSelect = 'none';
+	},
+
+	restoreSelect : function()
+	{
+	    var obj = document.body;
+
+		obj.onselectstart = ffresults.selectFunc;
+		obj.unselectable = ffresults.selectState;
+		obj.style.MozUserSelect = ffresults.mozSelect;
+	},
+
+
+	drag : function (e,size)
+	{
+		if(!document.getElementById) return;
+		
+		if(!e) e = window.event;
+		var targ = e.target || e.srcElement;
+	    ffresults.resize = size;
+
+		if(targ.id != 'ffresult_bar' && targ.id != 'ffresult_szimg') return true;
+		ffresults.noSelect();
+
+		ffresults.element = document.getElementById('ffresult_win');
+		ffresults.objectX = parseInt(ffresults.element.style.left,10);
+		ffresults.objectY = parseInt(ffresults.element.style.top,10);
+		ffresults.objectH = parseInt(ffresults.element.style.height,10);
+		ffresults.objectW = parseInt(ffresults.element.style.width,10);
+
+		ffresults.cover = document.getElementById('ffresult_cvr');
+		ffresults.cover.style.zIndex = '40';
+		ffresults.mouseDownX = e.clientX;
+		ffresults.mouseDownY = e.clientY;
+		if(e.preventDefault) e.preventDefault();
+		e.returnValue = false;
+		e.cancelBubble = true;
+		ffresults.attach(document,"mouseup",ffresults.drop);
+		ffresults.attach(document,"mousemove",ffresults.move);
+	},
+
+
+
+
+	attach : function(to,eventname,func)
+	{
+		if(to.addEventListener) 
+			to.addEventListener(eventname,func,false);
+		else
+			to.attachEvent("on" + eventname,func);
+	},
+
+	detach : function(to,eventname,func)
+	{
+		if(to.removeEventListener) 
+			to.removeEventListener(eventname,func,false);
+		else
+			to.detachEvent("on" + eventname,func);
+	},
+
+	drop : function(e)
+	{
+		ffresults.detach(document,"mouseup",ffresults.drop);
+		ffresults.detach(document,"mousemove",ffresults.move);
+		ffresults.cover.style.zIndex = 0;	
+		ffresults.element = null;
+		ffresults.restoreSelect();
+	},
+
+	move: function(e)
+	{
+	   if(!e) e = window.event;
+
+	   e.returnValue = false;
+	   e.cancelBubble = true;
+	   if(e.preventDefault) e.preventDefault();
+
+		var x = e.clientX;
+		var y = e.clientY; 
+
+		if(ffresults.resize)
+		{
+			var winW = ffresults.objectW + x - ffresults.mouseDownX;
+			var winH = ffresults.objectH + y - ffresults.mouseDownY;
+			
+			if(winH < 128) winH = 128;
+			if(winW < 128) winW = 128;
+
+			ffresults.element.style.width = winW + "px";
+			ffresults.element.style.height = winH + "px";
+		}
+		else
+		{
+			var left = ffresults.objectX + x - ffresults.mouseDownX;
+			var top = ffresults.objectY + y - ffresults.mouseDownY;
+
+			ffresults.element.style.left = left + "px";
+			ffresults.element.style.top = top + "px";
+		}
+		
+
+	},
+
+	hide : function()
+	{
+		var rStyle = document.getElementById('ffresult_win').style;
+		rStyle.display = "none";
+		rStyle.zIndex = 0;
+		var ifr = document.getElementById('ffresult_ifr');
+		if(ifr) ifr.src="";
+		var szImg = document.getElementById('ffresult_szimg');
+		if(szImg) szImg.src = "";
+
+	},
+
+
+	show : function(num)
+	{
+		if(!document.getElementById) return;
+
+		var searchForm = document.getElementById('ffresult_sbox'+num);
+		var idxLink = document.getElementById('ffresult_idx'+num);
+		var smpLink = document.getElementById('ffresult_smp'+num);
+		var advLink = document.getElementById('ffresult_adv'+num);
+
+		if(searchForm) searchForm.target = 'ffresult_frame';
+		if(idxLink) idxLink.target = 'ffresult_frame';
+		if(smpLink) smpLink.target = 'ffresult_frame';
+		if(advLink) advLink.target = 'ffresult_frame';
+
+		var rDiv = document.getElementById('ffresult_win');
+
+		if(!ffresults.ipos)
+		{
+		    if(ffresults.autoPos)
+			{
+			    ffresults.computePos(rDiv); 
+			}
+			else
+			{
+				rDiv.style.top = ffresults.initialY + 'px';
+				rDiv.style.left = ffresults.initialX + 'px';
+				rDiv.style.width = ffresults.initialW + 'px';
+				rDiv.style.height = (ffresults.initialH - 36) + 'px';	
+			}
+			ffresults.ipos = true;
+		}
+
+		var szImg = document.getElementById('ffresult_szimg');
+		if(szImg) szImg.src = ffresults.sizeImageUrl;
+
+		var dragBar = document.getElementById('ffresult_bar');
+		if(dragBar) 
+		{
+			dragBar.style.backgroundColor = ffresults.barColor;
+			dragBar.style.borderColor = ffresults.barColor;
+		}
+
+		rDiv.style.zIndex = ffresults.initialZ;
+		rDiv.style.display = "block";
+	},
+
+
+
+	computePos : function(rDiv)
+	{
+
+		var view = ffresults.viewSize();
+		var w = parseInt(view.width * 0.75,10);
+		var h = parseInt(view.height * 0.75,10);
+		if(w < 220) w = 220;
+		if(h < 220) h = 220;
+
+
+		var left = parseInt((view.width - w ) / 2,10);
+		var top = parseInt((view.height - (h + 36)) / 2,10);
+
+
+		if(left < 0) left = 0;
+		if(top < 0) top = 0;
+
+		rDiv.style.top = (top + view.scrollY) + 'px';
+		rDiv.style.left =  (left + view.scrollX) + 'px';
+		rDiv.style.width =  w + 'px';
+		rDiv.style.height =  h + 'px';
+
+	},
+	
+	viewSize : function()
+	{   
+		var w = 0;
+		var h = 0;
+		var sx = 0;
+		var sy = 0;
+
+	    if(window.innerWidth)	
+		{  // non-ie
+		   w = window.innerWidth;
+		   h = window.innerHeight;
+		   sx = window.pageXOffset;
+		   sy = window.pageYOffset;
+		}
+		else
+		{
+		    var elem;
+			if(document.documentElement && document.documentElement.clientWidth != 0)
+			{   // ie strict
+				elem = document.documentElement;
+			}
+			else
+			{	// ie quirks
+				elem = document.body;
+			}
+			w = elem.clientWidth;
+			h = elem.clientHeight;
+			sx = elem.scrollLeft;
+			sy = elem.scrollTop;
+			
+		}
+		  
+		
+		return {width: w,height: h, scrollX: sx, scrollY: sy};
+		
+	}
+
+
+};
+
+//-->
+</script>
+<!-- END of freefind onpage results html -->
+
+<p align="left">&nbsp;</p>
+
+<!-- start of freefind search box html -->
+<table cellpadding=0 cellspacing=0 border=0 align="center">
+<tr>
+	<td colspan=2 style="font-family: Arial, Helvetica, sans-serif; font-size: 7.5pt;">
+		<form  id="ffresult_sbox0" style="margin:0px; margin-top:4px;" action="http://search.freefind.com/find.html" method="get" accept-charset="utf-8" onsubmit="ffresults.show(0);">
+		<input type="hidden" name="si" value="25651115">
+		<input type="hidden" name="pid" value="r">
+		<input type="hidden" name="n" value="0">
+		<input type="hidden" name="_charset_" value="">
+		<input type="hidden" name="bcd" value="&#247;">
+		<input type="hidden" name="sbv" value="j1">
+		<input type="text" name="query" size="15"> 
+		<input type="submit" value="CERCA">
+		</form>
+	</td>
+</tr>
+<tr>
+	<td style="text-align:center; font-family: Arial, Helvetica, sans-serif;	font-size: 7.5pt; padding-top:4px;">
+		<a id="ffresult_adv0" onclick="ffresults.show(0);" href="http://search.freefind.com/find.html?si=25651115&amp;pid=a&amp;sbv=j1">RICERCA AVANZATA</a>
+	</td>
+</tr>
+</table>
+<!-- end of freefind search box html -->
+
+<p align="center">
+<img border="0" src="images/mondodiarelia.jpg" width="964" height="200"></p>
+<div align="center">
+<table id="table1" height="134" class="style1">
+	<tr>
+		<td>
+		<img border="0" src="images/imgingresso.jpg" width="350" height="617"></td>
+		<td background="images/cartabackground.jpg" style="width: 860px">
+<p align="center"><b><font size="4">ULTIMO AGGIORNAMENTO
+: <font color="#CC0000">
+<!--webbot bot="Timestamp" S-Type="EDITED"
+S-Format="%d/%m/%y" startspan -->16/11/25<!--webbot bot="Timestamp" i-checksum="13009" endspan --></font></font></b></p>
+<p align="center"><a href="Alto_Consiglio.htm">
+<img src="images/campaltoconsigliocart.jpg" width="711" height="136" class="style32"></a></p>
+		</td>
+	</tr>
+	</table>
+</div>
+<p align="center"><b><font size="4">INTRODUZIONE</font><font size="5">&nbsp;</font></b></p>
+<p align="center"><b><font size="4">Arelia è un'ambientazione fantasy di mia
+creazione che ha le sue regole ma può essere adattata per
+qualsiasi gioco di ruolo fantasy.</font></b></p>
+<p align="center"><b><font size="4">Si tratta di un mondo completo con una sua
+storia del tutto originale evolutasi nel corso degli anni attraverso il gioco
+all'interno della stessa. </font></b></p>
+<p align="center"><b><font size="4">E' stata creata pensando ad una
+ambientazione non eccessivamente dispersiva ma piena di possibilità di
+avventura con una presenza della magia rilevante ma non eccessiva.</font></b></p>
+<p align="center"><b><font size="4">Rappresenta una risorsa per tutti quei
+master che non avendo il tempo di ideare una campagna originale possono
+usufruire di questo mondo che conta ormai un approfondimento che supera i 6 anni
+...</font></b></p>
+<p align="center"><b><font size="4">Per questo motivo coloro che desiderino
+utilizzare a fini personali e gratuiti la mia campagna non solo potranno
+raccogliere le informazioni dal sito ma potranno aggiornare la storia della
+campagna che è in continua evoluzione e potranno essere anche ospitati su una
+pagina di questo sito.</font></b></p>
+<p align="center"><b><font size="4">Vorrei ringraziare personalmente tutti i
+giocatori che nel corso di questi anni, giocando con me, hanno contribuito
+notevolmente all'evoluzione del mondo ed hanno mantenuto vivo lo spirito di gioco 
+necessario a rendere questa ambientazione unica al mondo. Uno speciale grazie quindi a Francesco P., Francesco
+I., Giancarlo, Gianluca, Gabriele, Domenico, Osvaldo, Oscar, Massimiliano C.,
+Massimiliano P., Mario, Nando, Fabrizio, Leandro, Daniela, Fabio, Piero, Sergio,
+Davide, Bruno, Andrea, Giulio, Rodolfo, Vincenzo, Enrico, Carmine, Michele, 
+Andrea e Fabio.</font></b></p>
+<p align="center"><img border="0" src="images/brazier.gif" width="82" height="70"></p>
+<p align="center"><a href="viaggiatore.htm"><img border="0" src="images/viaggiatore.jpg" width="200" height="422"></a></p>
+
+<p align="center"><font color="#800080"><b>Questo sito non ha alcuno scopo di
+lucro o commerciale</b></font></p>
+
+<p align="center"><font color="#0000CC" size="2" face="Book Antiqua"><b>Proprietà letteraria
+riservata. Copyright © Costaeurope.<br>
+Il sito è stato realizzato interamente dal medesimo, il quale si riserva ogni
+conseguente diritto ai sensi della normativa vigente e ogni possibile
+utilizzazione commerciale dei suoi contenuti autentici.
+I diritti relativi ai soli testi firmati, alle immagini inserite e alle
+citazioni ai gdr conosciuti appartengono invece ai rispettivi autori.
+La riproduzione di ogni elemento del sito (salva la copia per uso esclusivamente
+personale) è vietata con qualsiasi mezzo, digitale o analogico, senza il
+consenso espresso dell'autore. E' espressamente consentita la citazione e 
+l'utilizzazione a titolo di gioco gratuito, cronaca o recensione, ove sia 
+accompagnata dal nome dell'autore e dall'indicazione del sito
+<a href="http://digilander.libero.it/costaeurope/Index.htm">
+http://www.arelia.it</a> .
+Sono consentiti - e graditi - i link da altri siti alla prima pagina o a singoli
+testi e/o articoli, senza necessità di previo consenso da parte dell'autore e/o
+del webmaster.</b></font><br>
+</p>
+
+<p align="center"><i><font face="Arial, Helvetica" size="1">DUNGEONS &amp;
+DRAGONS, D&amp;D, ADVANCED DUNGEONS &amp; DRAGONS, AD&amp;D, GREYHAWK, LIVING
+GREYHAWK, WORLD OF GREYHAWK and RPGA are registered trademarks of Wizards of the
+Coast (WotC), Inc. DUNGEON MASTER, MONSTROUS COMPENDIUM, and all related
+references are trademarks of WotC, Inc. All WotC characters, character names,
+and the distinctive likenesses thereof are trademarks owned by WotC, Inc. WotC,
+Inc. is a subsidiary of Hasbro, Inc. This web site is not authorized or endorsed
+by WotC, Inc. Use of the name of any product without mention of trademark status
+should not be taken as a challenge to such status.</font></i></p>
+
+<p align="center"><font color="#0000CC" size="2" face="Book Antiqua"><b>*All Images in this site are © copyright of the respective artists.*</b></font></p>
+
+</body>
+
+</html>

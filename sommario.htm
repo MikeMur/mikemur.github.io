@@ -1,0 +1,240 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 12.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Sommario</title>
+<base target="principale">
+
+<style type="text/css">
+.style1 {
+	border-width: 0px;
+}
+</style>
+
+</head>
+
+<SCRIPT LANGUAGE="JavaScript1.2">
+<!--
+/********************************************************
+ This JavaScript code uses techniques found at
+ The Dynamic Duo - http://www.dansteinman.com/dynduo/
+
+ Edited by Howard Chen
+ Get more JavaScripts at http://members.xoom.com/7432/
+ Bugs report to hchen007@geocities.com
+ This script is free as long as the credits above is kept
+ ********************************************************/
+
+image_used = "pegaso.gif";   // Filename of the image
+width_of_image = 100;
+height_of_image = 89;
+
+
+//===============DO NOT EDIT BELOW THIS LINE================
+
+  ns4 = (document.layers)? true:false
+  ie4 = (document.all)? true:false
+
+  function onerror() {
+    location.href="javascript:"
+    }
+  function DynLayer(id,nestref) {
+          if (ns4) {
+                  this.css = (nestref)? eval("document."+nestref+".document."+id) : document.layers[id]
+                  this.x = this.css.left
+                  this.y = this.css.top
+          }
+          else if (ie4) {
+                  this.css = document.all[id].style
+                  this.x = this.css.pixelLeft
+                  this.y = this.css.pixelTop
+          }
+          this.show = DynLayerShow
+          this.hide = DynLayerHide
+          this.addon = DynLayerAddon
+          this.addon(id,nestref)
+  }
+
+  function DynLayerMoveTo(x,y) {
+          if (x!=null) {
+                  this.x = x
+                  this.css.left = this.x
+          }
+          if (y!=null) {
+                  this.y = y
+                  this.css.top = this.y
+          }
+  }
+  function DynLayerMoveBy(x,y) {
+          this.moveTo(this.x+x,this.y+y)
+  }
+  function DynLayerShow() {
+          this.css.visibility = (ns4)? "show" : "visible"
+  }
+  function DynLayerHide() {
+          this.css.visibility = (ns4)? "hide" : "hidden"
+  }
+  function DynLayerAddon(id,nestref) {
+          this.id = id
+          this.nestref = nestref
+          this.w = (ns4)? this.css.clip.width : this.css.pixelWidth
+          this.h = (ns4)? this.css.clip.height : this.css.pixelHeight
+          this.doc = (ns4)? this.css.document : document
+          this.event = (ns4)? this.css : document.all[id]
+          this.obj = id + "DynLayer"
+          eval(this.obj + "=this")
+          this.moveTo = DynLayerMoveTo
+          this.moveBy = DynLayerMoveBy
+          this.slideTo = DynLayerSlideTo
+          this.slideBy = DynLayerSlideBy
+          this.slideStart = DynLayerSlideStart
+          this.slide = DynLayerSlide
+  }
+  function DynLayerSlideTo(endx,endy,inc,speed,fn) {
+          if (endx==null) endx = this.x
+          if (endy==null) endy = this.y
+          var distx = endx-this.x
+          var disty = endy-this.y
+          this.slideStart(endx,endy,distx,disty,inc,speed,fn)
+  }
+  function DynLayerSlideBy(distx,disty,inc,speed,fn) {
+          var endx = this.x + distx
+          var endy = this.y + disty
+          this.slideStart(endx,endy,distx,disty,inc,speed,fn)
+  }
+  function DynLayerSlideStart(endx,endy,distx,disty,inc,speed,fn) {
+          if (this.slideActive) return
+          var num = Math.sqrt(Math.pow(distx,2) + Math.pow(disty,2))/inc
+          var dx = distx/num
+          var dy = disty/num
+          if (!fn) fn = null
+          this.slideActive = true
+          this.slide(dx,dy,endx,endy,num,1,speed,fn)
+  }
+  function DynLayerSlide(dx,dy,endx,endy,num,i,speed,fn) {
+          if (!this.slideActive) return
+          if (i++ < num) {
+                  this.moveBy(dx,dy)
+                  setTimeout(this.obj+".slide("+dx+","+dy+","+endx+","+endy+","+num+","+i+","+speed+",\""+fn+"\")",speed)
+          }
+          else {
+                  this.slideActive = false
+                  this.moveTo(endx,endy)
+                  eval(fn)
+          }
+  }
+
+  function createLayer(id,nestref,left,top,width,height,content,bgColor,visibility,zIndex) {
+          if (ns4) {
+                  if (nestref) {
+                          var lyr = eval("document."+nestref+".document."+id+" = new Layer(width, document."+nestref+")")
+                  }
+                  else {
+                          var lyr = document.layers[id] = new Layer(width)
+                          eval("document."+id+" = lyr")
+                  }
+                  lyr.left = left
+                  lyr.top = top
+                  if (height!=null) lyr.clip.height = height
+                  if (bgColor!=null) lyr.bgColor = bgColor
+                  lyr.visibility = (visibility=='hidden')? 'hide' : 'show'
+                  if (zIndex!=null) lyr.zIndex = zIndex
+                  if (content) {
+                          lyr.document.open()
+                          lyr.document.write(content)
+                          lyr.document.close()
+                  }
+          }
+          else if (ie4) {
+                  var str = '\n<DIV id='+id+' style="position:absolute; left:'+left+'; top:'+top+'; width:'+width
+                  if (height!=null) {
+                          str += '; height:'+height
+                          str += '; clip:rect(0,'+width+','+height+',0)'
+                  }
+                  if (bgColor!=null) str += '; background-color:'+bgColor         
+                  if (zIndex!=null) str += '; z-index:'+zIndex
+                  if (visibility) str += '; visibility:'+visibility
+                  str += ';">'+((content)?content:'')+'</DIV>'
+                  if (nestref) {
+                          index = nestref.lastIndexOf(".")
+                          var nestlyr = (index != -1)? nestref.substr(index+1) : nestref
+                          document.all[nestlyr].insertAdjacentHTML("BeforeEnd",str);
+                  }
+                  else {
+                          document.body.insertAdjacentHTML("BeforeEnd",str)
+                  }
+          }
+  }
+
+
+  function init() {
+    if (ns4 || ie4) {
+                document.onmousemove = mouseMove
+            if (ns4) document.captureEvents(Event.MOUSEMOVE)
+                createLayer("cursorDiv",null,-1*(width_of_image),-1*(height_of_image),width_of_image,height_of_image,"<IMG SRC=" + image_used + ">",null,null,0);
+            cursor = new DynLayer("cursorDiv");
+                }
+    }
+
+  function mouseMove(e) {
+    var x = (ns4)? e.pageX : event.x
+    var y = (ns4)? e.pageY : event.y+document.body.scrollTop
+    cursor.moveTo(x+1,y+1);
+    }
+
+//-->
+</SCRIPT>
+
+<BODY onLoad="init()" bgcolor="#000000" text="#FFFFFF">
+
+<!-- --><!-- -->
+
+<p align="center"><img border="0" src="images/arelia-logo-piccolo.jpg" width="150" height="104"></p>
+
+<!-- \/ GuestGEAR Code by http://htmlgear.com \/ -->
+<p align="center"><a href="introduzione.htm">
+<img border="0" src="images/Home-page.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="nuove_regole.htm">
+<img border="0" src="images/Nuove-Regole.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="magia.htm">
+<img border="0" src="images/MagiaP.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="oggetti_magici.htm">
+<img border="0" src="images/oggettimagicipuls.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="culti_di_arelia.htm">
+<img border="0" src="images/Culti.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="mostri.htm">
+<img border="0" src="images/MostriP.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="Emporio%20Areliano.htm">
+<img border="0" src="images/pulsanteemporio.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="Storia.htm">
+<img border="0" src="images/Storia.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="geografia_di_arelia.htm">
+<img border="0" src="images/Geografia.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="Areliart.htm">
+<img border="0" src="images/artareliapuls.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="descrizione_della_campagna.htm">
+<img border="0" src="images/Eroi-di-Arelia.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="personaggi_giocanti.htm">
+<img border="0" src="images/cimitero.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="downloads.htm">
+<img border="0" src="images/Downloads.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="links.htm">
+<img border="0" src="images/Links.jpg" width="130" height="77"></a></p>
+<p align="center"><a href="Sagheareliane.htm">
+<img src="images/saghearelianecart.jpg" width="130" height="224" class="style1"></a></p>
+<p align="center">
+<a href="http://areliawar.prophpbb.com/?sid=6b85d59a04ca552e5f8860e47916b437"><img border="0" src="images/Book.jpg" width="130" height="224"></a></p>
+
+<!--WEBBOT bot="HTMLMarkup" startspan ALT="Site Meter" --><p align="center"><BR><a 
+href="http://s12.sitemeter.com/stats.asp?site=s12venusia" 
+target="_top"><BR><img 
+src="http://s12.sitemeter.com/meter.asp?site=s12venusia" alt="Site Meter" 
+border=0></a><BR><!--WEBBOT bot="HTMLMarkup" endspan -->
+
+<p align="center"><a href="mailto:costaeurope@libero.it"><img border="0" src="images/POSTA.gif" width="120" height="120"></a></p>
+
+</body>
+
+</html>
